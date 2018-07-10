@@ -1,0 +1,60 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "trying to get CI/CD and testing to play nice",
+  "main": "index.js",
+  "scripts": {
+    "build": "",
+    "deploy": "",
+    "dev": "",
+    "lint": "eslint --fix src test",
+    "test": "npm run lint && flow check && npm run test:cover && npm test:unit && npm run test:e2e",
+    "test:cover": "",
+    "test:unit": "",
+    "test:e2e": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgagnon/testing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexgagnon/testing/issues"
+  },
+  "homepage": "https://github.com/alexgagnon/testing#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.5",
+    "babel-plugin-istanbul": "^4.1.6",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "codecov": "^3.0.4",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.1.0",
+    "flow-bin": "^0.76.0",
+    "husky": "^1.0.0-rc.13",
+    "jasmine-core": "^3.1.0",
+    "karma": "^2.0.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sauce-launcher": "^1.2.0",
+    "karma-sourcemap-loader": "^0.3.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test:unit"
+    }
+  }
+}

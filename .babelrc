@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["env", {"modules": false, "useBuiltIns": true}],
+    "flow"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        ["istanbul", {"useInlineSourceMaps": false}]
+      ]
+    }
+  }
+}
