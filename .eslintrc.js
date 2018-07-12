@@ -6,7 +6,11 @@ module.exports = {
     node: true,
     jest: true
   },
-  extends: ['eslint:recommended', 'plugin:testcafe/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:testcafe/recommended',
+    'plugin:flowtype/recommended'
+  ],
   parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module'

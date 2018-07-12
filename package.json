@@ -12,7 +12,7 @@
     "test": "npm run lint && flow check && npm run test:cover && npm test:unit && npm run test:e2e",
     "test:coverage": "karma start test/unit/karma.cover.js",
     "test:unit": "karma start test/unit/karma.unit.js",
-    "test:e2e": "testcafe all test/e2e/index.test.js",
+    "test:e2e": "testcafe all test/e2e/*.test.js",
     "test:sauce": "npm run saucescript -- 0 && npm run saucescript -- 1 && npm run saucescript -- 2"
   },
   "repository": {
