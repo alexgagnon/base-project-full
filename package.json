@@ -7,7 +7,7 @@
     "build": "",
     "deploy": "",
     "dev": "",
-    "lint": "eslint --fix src test && stylelint --fix",
+    "lint": "eslint --fix src test",
     "saucescript": "karma start test/unit/karma.sauce.js",
     "test": "npm run lint && flow check && npm run test:cover && npm test:unit && npm run test:e2e",
     "test:cover": "karma start test/unit/karma.cover.js",
