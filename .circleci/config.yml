@@ -16,15 +16,18 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           name: test
           command: npm test
       - store_artifacts: # store anything by-products in a folder
-          path: artifacts/
+          path: coverage/
+          prefix: coverage/
       - store_test_results: # store the test results in a folder
           path: test-results/
 
   deploy:
+    machine:
+      enabled: true
     steps:
       - checkout
       - run:
-          name: deploy
+          name: deploy master branch
           command: echo "Deployed!"
 
 workflows: # allows for running multiple jobs sequentially
