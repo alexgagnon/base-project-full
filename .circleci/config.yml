@@ -3,15 +3,14 @@ version: 2
 defaults: &defaults # define defaults for jobs
   docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
     - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
-  steps:
-    - checkout # checkout the repo branch
-    - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
-        key: deps-{{ checksum "package-lock.json" }}
 
 jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   install:
     <<: *defaults # inject defaults object
     steps:
+      - checkout # checkout the repo branch
+      - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
+          key: deps-{{ checksum "package-lock.json" }}
       - run: # run a command, this one installs the dependencies
           name: Install
           command: npm install
@@ -24,6 +23,8 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
     <<: *defaults
     steps:
       - checkout
+      - restore-cache:
+          key: deps-{{ checksum "package-lock.json" }}
       - run:
           name: Running unit tests
           command: 'npm run test:unit'
@@ -33,6 +34,9 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   test-e2e:
     <<: *defaults
     steps:
+      - checkout
+      - restore-cache:
+          key: deps-{{ checksum "package-lock.json" }}
       - run:
           name: Running e2e tests
           command: 'npm run test:e2e'
@@ -42,6 +46,9 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   test-cover:
     <<: *defaults
     steps:
+      - checkout
+      - restore-cache:
+          key: deps-{{ checksum "package-lock.json" }}
       - run:
           name: Coverage
           command: |
@@ -52,15 +59,23 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   build:
     <<: *defaults
     steps:
+      - checkout
+      - restore-cache:
+          key: deps-{{ checksum "package-lock.json" }}
       - run:
           name: Building
           command: npm run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - dist/
 
   deploy:
     machine:
       enabled: true
     steps:
-      - checkout
+      - attach_workspace:
+          at: dist/
       - run:
           name: deploy master branch
           command: echo "Deployed!"
@@ -84,10 +99,13 @@ workflows: # allows for running multiple jobs sequentially
       #     type: approval
       #     requires:
       #       - test-cover
-      - deploy:
+      - build:
           requires:
             - test-cover
             # - hold
+      - deploy:
+          requires:
+            - build
           filters: # makes sure the job is only executed in specific cases
             branches:
               only: master
