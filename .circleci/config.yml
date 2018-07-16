@@ -19,16 +19,11 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - tmp
 
   test-unit:
     <<: *defaults
     steps:
-      - attach_workspace: # each job runs in a different container, need to reattach them
-          at: ~/project
+      - checkout
       - run:
           name: Running unit tests
           command: 'npm run test:unit'
