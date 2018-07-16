@@ -3,6 +3,8 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   build:
     docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
       - image: circleci/node:10-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
+
+    working_directory: ~/repo
     steps:
       - checkout # checkout the repo branch
       - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
@@ -21,7 +23,7 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           path: coverage/
           prefix: coverage/
       - store_test_results: # store the test results in a folder
-          path: test-results/
+          path: tmp/test-results/
 
   deploy:
     machine:

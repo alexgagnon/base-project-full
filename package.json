@@ -9,11 +9,13 @@
     "dev": "",
     "lint": "eslint --fix src test",
     "saucescript": "karma start test/unit/karma.sauce.js",
-    "test": "npm run lint && flow check && npm run test:cover && npm test:unit && npm run test:e2e",
+    "test": "npm run lint && flow check && npm run test:cover && npm run test:unit && npm run test:e2e",
     "test:cover": "karma start test/unit/karma.cover.js",
     "test:unit": "karma start test/unit/karma.unit.js",
     "test:e2e": "testcafe all test/e2e/*.test.js",
-    "test:sauce": "npm run saucescript -- 0 && npm run saucescript -- 1 && npm run saucescript -- 2"
+    "test:unit:sauce": "npm run saucescript -- 0 && npm run saucescript -- 1 && npm run saucescript -- 2",
+    "test:e2e:sauce": "",
+    "test:sauce": "npm run test:unit:sauce && npm run test:e2e:sauce"
   },
   "repository": {
     "type": "git",
