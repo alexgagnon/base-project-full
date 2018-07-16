@@ -1,10 +1,12 @@
 version: 2
-jobs: # can define different jobs, such as 'build', 'test', 'deploy'
-  build:
-    docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
-      - image: circleci/node:10-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
 
-    working_directory: ~/repo
+defaults: # define defaults for jobs
+  docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
+    - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
+
+jobs: # can define different jobs, such as 'build', 'test', 'deploy'
+  install:
+    <<: *defaults # inject defaults object
     steps:
       - checkout # checkout the repo branch
       - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
@@ -16,14 +18,24 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+
+  test-cover:
+    <<: *defaults
+    steps:
       - run:
-          name: test
-          command: npm test
-      - store_artifacts: # store anything by-products in a folder
-          path: coverage/
-          prefix: coverage/
-      - store_test_results: # store the test results in a folder
-          path: tmp/test-results/
+          name: Coverage
+          command: |
+            ./node_modules/.bin/codecov --token=$CODECOV_TOKEN # use CircleCI's environment variables to set this
+
+  test-unit:
+    <<: *defaults
+    steps:
+      - run: echo "unit test!"
+
+  test-e2e:
+    <<: *defaults
+    steps:
+      - run: echo "e2e test!"
 
   deploy:
     machine:
@@ -38,10 +50,20 @@ workflows: # allows for running multiple jobs sequentially
   version: 2
   build-test-deploy: # give a name to the workflow
     jobs: # list the jobs you want in it
-      - build
-      - deploy:
+      - install
+      - test-unit:
           requires: # makes sure things run in the right order
-            - build
+            - install
+      - test-e2e:
+          requires:
+            - install
+      - test-cover:
+          requires:
+            - test-unit
+            - test-e2e
+      - deploy:
+          requires:
+            - test-cover
           filters: # makes sure the job is only executed in specific cases
             branches:
               only: master
