@@ -1,9 +1,9 @@
 version: 2
 
 defaults: &defaults # define defaults for jobs
-  # working_directory: ~/project
+  working_directory: ~/project
   docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
-    - image: circleci/node:10-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
+    - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
 
 jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   install:
@@ -19,12 +19,16 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - tmp
 
   test-unit:
     <<: *defaults
     steps:
-      # - attach_workspace: # each job runs in a different container, need to reattach them
-      #     at: ~/project
+      - attach_workspace: # each job runs in a different container, need to reattach them
+          at: ~/project
       - run:
           name: Running unit tests
           command: 'npm run test:unit'
@@ -60,9 +64,6 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
       - run:
           name: Building
           command: npm run build
-      - persist_to_workspace:
-          root: ~/project
-          paths: dist/
 
   deploy:
     machine:
