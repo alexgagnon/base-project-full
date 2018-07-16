@@ -1,6 +1,6 @@
 var base = require('./karma.base.js');
 
-var dir = '../../coverage';
+var dir = '../../test-results/coverage';
 
 module.exports = function(config) {
   var options = Object.assign(base, {
