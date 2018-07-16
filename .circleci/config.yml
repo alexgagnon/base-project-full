@@ -19,20 +19,11 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           paths:
             - node_modules
 
-  test-cover:
-    <<: *defaults
-    steps:
-      - run:
-          name: Coverage
-          command: |
-            ./node_modules/.bin/codecov --token=$CODECOV_TOKEN # use CircleCI's environment variables to set this
-      - store_artifacts:
-          path: 'test-results/coverage'
-
-
   test-unit:
     <<: *defaults
     steps:
+      - attach_workspace: # each job runs in a different container, need to reattach them
+          at: ~/project
       - run:
           name: Running unit tests
           command: 'npm run test:unit'
@@ -42,11 +33,25 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   test-e2e:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Running e2e tests
           command: 'npm run test:e2e'
       - store_test_results:
           path: 'test-results/'
+
+  test-cover:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Coverage
+          command: |
+            ./node_modules/.bin/codecov --token=$CODECOV_TOKEN # use CircleCI's environment variables to set this
+      - store_artifacts:
+          path: 'test-results/coverage'
 
   deploy:
     machine:
