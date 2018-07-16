@@ -1,26 +1,22 @@
 version: 2
 
 defaults: &defaults # define defaults for jobs
-  working_directory: ~/project
   docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
     - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
+  steps:
+    - checkout # checkout the repo branch
+    - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
+        key: deps-{{ checksum "package-lock.json" }}
 
 jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   install:
     <<: *defaults # inject defaults object
     steps:
-      - checkout # checkout the repo branch
-      - restore-cache: # detect if you need to update the dependency cache, steps from here until 'save_cache' will only run if they are different. Since this is a nodejs project we'll do this with checksum of package file
-          key: dependency-cache-{{ checksum "package.json" }}
       - run: # run a command, this one installs the dependencies
           name: Install
           command: npm install
       - save_cache: # if you needed to update the cache, save it for next run
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules/
-      - persist_to_workspace:
-          root: ~/project
+          key: deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules/
 
@@ -37,8 +33,6 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   test-e2e:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: ~/project
       - run:
           name: Running e2e tests
           command: 'npm run test:e2e'
@@ -48,8 +42,6 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   test-cover:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: ~/project
       - run:
           name: Coverage
           command: |
