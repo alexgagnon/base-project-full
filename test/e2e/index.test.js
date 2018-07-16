@@ -1,6 +1,6 @@
 import {IndexPage} from './index.model.js';
 
-fixture('Index page').page('../../src/index.html');
+fixture`Index page`.page('../../src/index.html');
 
 test('Index page', async t => {
   const page = new IndexPage();
