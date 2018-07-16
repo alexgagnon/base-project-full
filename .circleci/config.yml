@@ -1,6 +1,7 @@
 version: 2
 
 defaults: &defaults # define defaults for jobs
+  working_directory: ~/project
   docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
     - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
 
@@ -77,9 +78,14 @@ workflows: # allows for running multiple jobs sequentially
           requires:
             - test-unit
             - test-e2e
+      # - hold: # this allows you to require manual approval before continuing
+      #     type: approval
+      #     requires:
+      #       - test-cover
       - deploy:
           requires:
             - test-cover
+            # - hold
           filters: # makes sure the job is only executed in specific cases
             branches:
               only: master
