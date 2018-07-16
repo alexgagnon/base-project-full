@@ -26,16 +26,27 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
           name: Coverage
           command: |
             ./node_modules/.bin/codecov --token=$CODECOV_TOKEN # use CircleCI's environment variables to set this
+      - store_artifacts:
+          path: 'test-results/coverage'
+
 
   test-unit:
     <<: *defaults
     steps:
-      - run: echo "unit test!"
+      - run:
+          name: Running unit tests
+          command: 'npm run test:unit'
+      - store_test_results:
+          path: 'test-results/'
 
   test-e2e:
     <<: *defaults
     steps:
-      - run: echo "e2e test!"
+      - run:
+          name: Running e2e tests
+          command: 'npm run test:e2e'
+      - store_test_results:
+          path: 'test-results/'
 
   deploy:
     machine:
