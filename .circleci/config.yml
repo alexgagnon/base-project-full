@@ -102,7 +102,7 @@ workflows: # allows for running multiple jobs sequentially
       - build:
           requires:
             - test-cover
-            # - hold
+            # - hold # see hold job above
       - deploy:
           requires:
             - build

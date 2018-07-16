@@ -4,7 +4,7 @@
   "description": "trying to get CI/CD and testing to play nice",
   "main": "index.js",
   "scripts": {
-    "build": "",
+    "build": "echo building!",
     "deploy": "",
     "dev": "",
     "lint": "eslint --fix src test",
