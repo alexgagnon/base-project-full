@@ -65,7 +65,8 @@ jobs: # can define different jobs, such as 'build', 'test', 'deploy'
       - run:
           name: Building
           command: npm run build
-      - persist_to_workspace:
+      - run: mkdir dist && touch dist/example # ONLY FOR DEMO PURPOSES
+      - persist_to_workspace: # store the build files so we can use them between jobs
           root: ~/project
           paths:
             - dist/
@@ -101,7 +102,8 @@ workflows: # allows for running multiple jobs sequentially
       #       - test-cover
       - build:
           requires:
-            - test-cover
+            - test-unit
+            - test-e2e
             # - hold # see hold job above
       - deploy:
           requires:
