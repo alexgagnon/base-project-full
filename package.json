@@ -14,9 +14,9 @@
     "test:cover": "karma start test/unit/karma.cover.js",
     "test:unit": "karma start test/unit/karma.unit.js",
     "test:e2e": "testcafe all test/e2e/*.test.js -r xunit:test-results/res.xml",
-    "test:unit:sauce": "npm run saucescript -- 0 && npm run saucescript -- 1 && npm run saucescript -- 2",
-    "test:e2e:sauce": "",
-    "test:sauce": "npm run test:unit:sauce && npm run test:e2e:sauce"
+    "test:sauce:unit": "npm run saucescript -- 0 && npm run saucescript -- 1 && npm run saucescript -- 2",
+    "test:sauce:e2e": "node test/e2e/runner.js",
+    "test:sauce": "npm run test:sauce:unit && npm run test:sauce:e2e"
   },
   "repository": {
     "type": "git",
@@ -40,11 +40,13 @@
     "commitizen": "^2.10.1",
     "concurrently": "^3.6.0",
     "cz-conventional-changelog": "^2.1.0",
+    "dotenv": "^6.0.0",
     "eslint": "^5.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-html": "^4.0.5",
     "eslint-plugin-testcafe": "^0.2.1",
     "flow-bin": "^0.76.0",
+    "globby": "^8.0.1",
     "husky": "^1.0.0-rc.13",
     "jasmine-core": "^3.1.0",
     "karma": "^2.0.4",
