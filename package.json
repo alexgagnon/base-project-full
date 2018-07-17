@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "echo building!",
+    "cmt": "npx git-cz",
     "deploy": "",
     "dev": "",
     "lint": "eslint --fix src test",
     "saucescript": "karma start test/unit/karma.sauce.js",
-    "test": "npm run lint && flow check && npm run test:cover && npm run test:unit && npm run test:e2e",
+    "test": "npm run lint && flow check && concurrently \"npm run test:unit\" \"npm run test:e2e\"",
     "test:cover": "karma start test/unit/karma.cover.js",
     "test:unit": "karma start test/unit/karma.unit.js",
     "test:e2e": "testcafe all test/e2e/*.test.js -r xunit:test-results/res.xml",
@@ -37,6 +38,7 @@
     "babel-preset-flow": "^6.23.0",
     "codecov": "^3.0.4",
     "commitizen": "^2.10.1",
+    "concurrently": "^3.6.0",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -71,8 +73,9 @@
     }
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run test:unit"
+    "scripts": {
+      "precommit": "npm run test:unit",
+      "prepush": "npm run test"
     }
   }
 }
