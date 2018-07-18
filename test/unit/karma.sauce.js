@@ -39,7 +39,10 @@ module.exports = function(config) {
       // mobile emulators are really slow
       captureTimeout: 300000,
       browserNoActivityTimeout: 300000,
-      plugins: base.plugins.concat(['karma-sauce-launcher'])
+      plugins: base.plugins.concat([
+        'karma-sauce-launcher',
+        'karma-junit-reporter'
+      ])
     })
   );
 };
