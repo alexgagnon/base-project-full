@@ -26,7 +26,13 @@ createTestCafe()
   })
   .catch(err => {
     console.error(err);
+    testcafe.close();
+    process.exit(0);
   })
   .then(() => testcafe.close());
 })
-.catch(err => console.error(err));
+.catch(err => {
+  console.log('in createtestcafe error');
+  console.error(err);
+  testcafe.close();
+});
