@@ -1,27 +1,34 @@
 if (!process.env.CI) {
   require('dotenv').config();
 }
+var fs = require('fs');
 var globby = require('globby');
 var createTestCafe = require('testcafe');
 var testcafeBrowsers = require('../browsers.js').testcafeBrowsers;
 var batch = testcafeBrowsers[process.argv[4] || 0];
-// var browsers = batch.join(',');
 var browsers = batch[0];
 console.log(browsers);
-var runner = null;
 var testcafe = null;
 
 var sources = globby.sync('test/e2e/*.test.js');
+try {
+  fs.mkdirSync('./test-results');
+} catch (err) {
+  // fine
+}
+var stream = fs.createWriteStream('./test-results/report.xml');
 
 createTestCafe()
 .then(tc => {
   testcafe = tc;
-  runner = testcafe
+  testcafe
   .createRunner()
   .src(sources)
   .browsers(browsers)
+  .reporter('xunit', stream)
   .run()
-  .then(failedCount => {
+  .then(() => {
+    stream.end();
     console.log('Success!');
   })
   .catch(err => {
@@ -32,7 +39,6 @@ createTestCafe()
   .then(() => testcafe.close());
 })
 .catch(err => {
-  console.log('in createtestcafe error');
   console.error(err);
   testcafe.close();
 });

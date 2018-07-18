@@ -20,8 +20,11 @@ module.exports = function(config) {
       browsers: Object.keys(batch),
       customLaunchers: batch,
       reporters: process.env.CI
-        ? ['dots', 'saucelabs'] // avoid spamming CI output
-        : ['progress', 'saucelabs'],
+        ? ['dots', 'saucelabs', 'junit'] // avoid spamming CI output
+        : ['progress', 'saucelabs', 'junit'],
+      junitReporter: {
+        outputDir: '../../test-results/'
+      },
       sauceLabs: {
         testName: 'testing',
         recordScreenshots: false,
