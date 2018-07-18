@@ -1,9 +1,10 @@
 # testing
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![Build Status](https://saucelabs.com/buildstatus/alexgagnon)](https://saucelabs.com/beta/builds/a943ddaa6e8242e2a794ec890a550372)
 [![codecov](https://codecov.io/gh/alexgagnon/testing/branch/master/graph/badge.svg)](https://codecov.io/gh/alexgagnon/testing)
 [![CircleCI](https://circleci.com/gh/alexgagnon/testing/tree/master.svg?style=svg&circle-token=8fd070b9be24a6fab6b432f84001622d4a110382)](https://circleci.com/gh/alexgagnon/testing/tree/master)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/alexgagnon)](https://saucelabs.com/u/alexgagnon)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/alexgagnon.svg)](https://saucelabs.com/u/alexgagnon)
 
 POC of getting various CI/CD and test frameworks running together. Includes:
 
