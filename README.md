@@ -20,3 +20,16 @@ POC of getting various CI/CD and test frameworks running together. Includes:
 - jasmine - unit test framework
 - testcafe - e2e test framework
 - semantic-release - controls publishing/deploys with automatic versioning
+
+## How to use
+
+- add changed files to tracked (git add)
+- use 'npm run cmt' to commit
+- commitizen will run git commit formatter
+- husky will run local unit tests
+- push
+- husky will run all tests, and if successful, pushes to remote
+- circleci detects changes, and begins running workflow
+- runs tests in saucelabs (karma for unit, testcafe for e2e)
+- if both unit and e2e jobs pass, coverage report is generated and sent to codecov, and the build process executes
+- if successful, goes to deploy (currently only if the changes are in ;master branch)
