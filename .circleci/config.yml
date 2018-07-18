@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults # define defaults for jobs
   docker: # define the docker containers you want, for browsers, suffix '-browsers', to have the image run in memory, use '-ram', etc.
-    - image: circleci/node:6-browsers # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
+    - image: circleci/node:6 # primary container, the commands in 'steps' execute on this, additional images are run as docker containers
 
 jobs: # can define different jobs, such as 'build', 'test', 'deploy'
   install:
