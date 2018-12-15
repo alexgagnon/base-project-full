@@ -6,12 +6,12 @@
 [![Sauce Test Status](https://saucelabs.com/buildstatus/alexgagnon)](https://saucelabs.com/u/alexgagnon)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/alexgagnon.svg)](https://saucelabs.com/u/alexgagnon)
 
-POC of getting various CI/CD and test frameworks running together. Includes:
+Base project for getting set up for web applications, including testing and CI/CD pipeline
 
 - circleci - ci/cd server
 - codecov - coverage reports
 - saucelabs - browser virtualizer
-- flow - javascript static type checker
+- typescript - javascript static type checker and compiler
 - eslint - javascript linter
 - stylelint - css linter
 - husky - for custom git hooks to restrict commit and push
@@ -32,4 +32,4 @@ POC of getting various CI/CD and test frameworks running together. Includes:
 - circleci detects changes, and begins running workflow
 - runs tests in saucelabs (karma for unit, testcafe for e2e)
 - if both unit and e2e jobs pass, coverage report is generated and sent to codecov, and the build process executes
-- if successful, goes to deploy (currently only if the changes are in ;master branch)
+- if successful, goes to deploy (currently only if the changes are in master branch)
