@@ -1,4 +1,4 @@
-const {add} = require('./someFile.js');
+const {add} = require('./someFile.ts');
 
 describe('someFile', () => {
   describe('add', () => {
