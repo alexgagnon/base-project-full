@@ -1,4 +1,8 @@
+if (!process.env.CI) {
+  require('dotenv').config();
+}
 var base = require('./karma.base.js');
+var batches = require('../browsers.js').batches;
 
 /**
  * Having too many tests running concurrently on saucelabs
@@ -6,76 +10,21 @@ var base = require('./karma.base.js');
  * smaller batches.
  */
 
-var batches = [
-  // the cool kids
-  {
-    sl_chrome: {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      platform: 'Windows 7'
-    },
-    sl_firefox: {
-      base: 'SauceLabs',
-      browserName: 'firefox'
-    },
-    sl_mac_safari: {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.10'
-    }
-  },
-  // ie family
-  {
-    sl_ie_9: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 7',
-      version: '9'
-    },
-    sl_ie_10: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 8',
-      version: '10'
-    },
-    sl_ie_11: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 8.1',
-      version: '11'
-    },
-    sl_edge: {
-      base: 'SauceLabs',
-      browserName: 'MicrosoftEdge',
-      platform: 'Windows 10'
-    }
-  },
-  // mobile
-  {
-    sl_ios_safari_9: {
-      base: 'SauceLabs',
-      browserName: 'iphone',
-      version: '10.3'
-    },
-    sl_android_6_0: {
-      base: 'SauceLabs',
-      browserName: 'android',
-      version: '6.0'
-    }
-  }
-];
-
 module.exports = function(config) {
   var batch = batches[process.argv[4] || 0];
 
+  // NOTE: the saucelabs-launcher uses process.env.SAUCE_USERNAME and process.env.SAUCE_ACCESS_KEY by default
   config.set(
     Object.assign(base, {
       singleRun: true,
       browsers: Object.keys(batch),
       customLaunchers: batch,
       reporters: process.env.CI
-        ? ['dots', 'saucelabs'] // avoid spamming CI output
-        : ['progress', 'saucelabs'],
+        ? ['dots', 'saucelabs', 'junit'] // avoid spamming CI output
+        : ['progress', 'saucelabs', 'junit'],
+      junitReporter: {
+        outputDir: '../../test-results/'
+      },
       sauceLabs: {
         testName: 'testing',
         recordScreenshots: false,
@@ -90,7 +39,10 @@ module.exports = function(config) {
       // mobile emulators are really slow
       captureTimeout: 300000,
       browserNoActivityTimeout: 300000,
-      plugins: base.plugins.concat(['karma-sauce-launcher'])
+      plugins: base.plugins.concat([
+        'karma-sauce-launcher',
+        'karma-junit-reporter'
+      ])
     })
   );
 };

@@ -1,6 +1,6 @@
 var base = require('./karma.base.js');
 
-var dir = '../../test-results/coverage';
+var dir = '../../coverage';
 
 module.exports = function(config) {
   var options = Object.assign(base, {
@@ -16,13 +16,13 @@ module.exports = function(config) {
     plugins: base.plugins.concat(['karma-coverage', 'karma-phantomjs-launcher'])
   });
 
-  // add babel-plugin-istanbul for code instrumentation
+  // add babel-plugin-istanbul to babel-loader for code instrumentation
   options.webpack.module.rules[0].options = {
     plugins: [
       [
         'istanbul',
         {
-          exclude: ['test/', 'src/*.test.js']
+          exclude: ['test/', 'src/**/*.test.js']
         }
       ]
     ]
